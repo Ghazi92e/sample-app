@@ -8,4 +8,9 @@ SampleApp::Application.routes.draw do
   get '/help',    :to => 'pages#help'
 
   root :to => 'pages#home'
+
+  resources :users
+  get 'users/:id', to: 'users#new'
+
+  get '/signup',  :to => 'users#new'
 end
