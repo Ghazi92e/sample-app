@@ -1,5 +1,5 @@
 SampleApp::Application.routes.draw do
-  get 'users/new'
+
 
   get '/signup',  :to => 'users#new'
 
@@ -10,7 +10,5 @@ SampleApp::Application.routes.draw do
   root :to => 'pages#home'
 
   resources :users
-  get 'users/:id', to: 'users#new'
-
   get '/signup',  :to => 'users#new'
 end
