@@ -16,10 +16,7 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
-    def user_params
-        attr_accessor :password
-        params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
+    attr_accessor :password
 
     email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -50,7 +47,7 @@ class User < ApplicationRecord
     end
 
     private
-
+    
     def encrypt_password
         self.salt = make_salt if new_record?
         self.encrypted_password = encrypt(password)
