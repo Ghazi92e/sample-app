@@ -31,6 +31,9 @@ class User < ApplicationRecord
                          :confirmation => true,
                          :length       => { :within => 6..40 }
 
+    validates :password_confirmation, :presence => true
+
+
     before_save :encrypt_password
 
     # Retour true (vrai) si le mot de passe correspond.
@@ -44,6 +47,11 @@ class User < ApplicationRecord
         user = find_by_email(email)
         return nil  if user.nil?
         return user if user.has_password?(submitted_password)
+    end
+
+    def self.authenticate_with_salt(id, cookie_salt) #Trouve l'utilisateur par son id unique et son cookie
+        user = find_by_id(id)
+        (user && user.salt == cookie_salt) ? user: nil #if-else en une seule ligne
     end
 
     private

@@ -13,10 +13,10 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save # Traite un succès d'enregistrement.
-      flash[:success]
+      flash[:success] = "Bienvenue dans l'Application Exemple !"
       redirect_to @user
     else
-      @titre = "Inscription"
+      @titre = "Sign up"
       render 'new'
   end
 end
@@ -24,6 +24,6 @@ end
   private
 
   def user_params
-    params.require(:user).permit(:nom, :email, :password, :salt, :encrypted_password)
+    params.require(:user).permit(:nom, :email, :password, :password_confirmation, :salt, :encrypted_password)
   end
 end
