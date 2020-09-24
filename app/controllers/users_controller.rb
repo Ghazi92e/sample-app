@@ -1,14 +1,11 @@
 class UsersController < ApplicationController
   before_action :authenticate, :only => [:index, :edit, :update]
   before_action :correct_user, :only => [:edit, :update]
+  before_action :admin_user, :only => :destroy
 
   def index
     @titre = "Tous les utilisateurs"
-    @user = User.all
-  end
-
-  def edit
-    @titre = "Édition profil"
+    @users = User.paginate(:page => params[:page])
   end
 
   def show
@@ -32,46 +29,46 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+    @titre = "Edition profil"
+  end
+
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(user_params)
       flash[:success] = "Profil actualisé."
       redirect_to @user
     else
-      @titre = "Édition profil"
+      @titre = "Edition profil"
       render 'edit'
-    end
   end
+
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "Utilisateur supprimé."
+    redirect_to users_path
+  end
+
+
+  private
 
   def edit
     @user = User.find(params[:id])
     @titre = "Édition profil"
   end
 
-  private
+  def authenticate
+    deny_access unless signed_in?
+  end
 
-    def user_params
-      params.require(:user).permit(:nom, :email, :password, :password_confirmation, :salt, :encrypted_password)
-    end
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_path) unless current_user?(@user)
+  end
 
-    def authenticate
-      deny_access unless signed_in?
-    end
-
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_path) unless current_user?(@user)
-    end
-
-    def signed_in_user
-      redirect_to signin_url, notice: "Please sign in." unless signed_in?
-    end
-
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
-    end
-
-
-  
+  def admin_user
+    redirect_to(root_path) unless current_user.admin?
+  end
 end
+

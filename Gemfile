@@ -31,6 +31,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'gravatar_image_tag'
+gem 'will_paginate'
+gem 'rails-ujs'
+gem 'bcrypt'
 group :development do
   gem 'rspec-rails', '4.0.1'
   gem 'annotate'
