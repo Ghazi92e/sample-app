@@ -53,22 +53,23 @@ class UsersController < ApplicationController
 
   private
 
-  def edit
-    @user = User.find(params[:id])
-    @titre = "Édition profil"
-  end
+    def edit
+      @user = User.find(params[:id])
+      @titre = "Édition profil"
+    end
 
-  def authenticate
-    deny_access unless signed_in?
-  end
+    def authenticate
+      deny_access unless signed_in?
+    end
 
-  def correct_user
-    @user = User.find(params[:id])
-    redirect_to(root_path) unless current_user?(@user)
-  end
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_path) unless current_user?(@user)
+    end
 
-  def admin_user
-    redirect_to(root_path) unless current_user.admin?
+    def admin_user
+      redirect_to(root_path) unless current_user.admin?
+    end
   end
 end
 
