@@ -1,0 +1,9 @@
+<h1>Tous les utilisateurs</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%= render @users %>   <!-- ici render user cherche automatiquement un partiel appelé _user.html.erb @users = liste d'objets User-->
+</ul>
+
+<%= will_paginate %>
