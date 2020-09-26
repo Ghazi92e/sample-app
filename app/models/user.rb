@@ -19,6 +19,8 @@
 class User < ApplicationRecord
     attr_accessor :password
 
+    has_many :microposts, dependent: :destroy # 'dependent' s'assurer que les micro-messages de l'utilisateur seront détruits avec lui.
+
     email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
     validates :nom,  :presence => true,
@@ -53,6 +55,10 @@ class User < ApplicationRecord
     def self.authenticate_with_salt(id, cookie_salt) #Trouve l'utilisateur par son id unique et son cookie
         user = find_by_id(id)
         (user && user.salt == cookie_salt) ? user: nil #if-else en une seule ligne
+    end
+
+    def feed
+        microposts
     end
 
     private

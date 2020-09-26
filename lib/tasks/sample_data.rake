@@ -17,6 +17,15 @@ namespace :db do
                    :email => email,
                    :password => password,
                    :password_confirmation => password)
+      end
+    end
+    
+  desc "Remplissage de la base de données avec des messages fictifs"
+  task :populate => :environment do
+    User.all(:limit => 6).each do |user|
+      50.times do
+        user.microposts.create!(:content => Faker::Lorem.sentence(5))
+      end
     end
   end
 end

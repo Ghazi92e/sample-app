@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :authenticate, :only => [:index, :edit, :update]
+  before_action :authenticate, :only => [:index, :edit, :update, :destroy]
   before_action :correct_user, :only => [:edit, :update]
-  before_action :admin_user, :only => :destroy
+  before_action :admin_user,   only: :destroy
 
   def index
     @titre = "Tous les utilisateurs"
@@ -10,7 +10,14 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(:page => params[:page])
     @titre = @user.nom
+  end
+
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted"
+    redirect_to users_url
   end
 
   def new
@@ -56,10 +63,6 @@ end
 
   def user_params
     params.require(:user).permit(:nom, :email, :password, :password_confirmation, :salt, :encrypted_password)
-  end
-
-  def authenticate
-    deny_access unless signed_in?
   end
 
   def correct_user
